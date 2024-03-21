@@ -11,7 +11,7 @@ export const Database = () => {
   const users = useInitDatabase()
 
   useEffect(() => {
-    if (!curUser.id) setCurUser(users[0])
+    if (!curUser?.id) setCurUser(users[0])
   }, [curUser, users])
 
   return (
