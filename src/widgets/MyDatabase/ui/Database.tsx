@@ -24,7 +24,7 @@ export const Database = () => {
             <UsersList {...{ setCurUser }}></UsersList>
           </div>
           <div className="database__userDisplay">
-            <UserForm {...{ user: curUser, setCurUser }}></UserForm>
+            <UserForm key={curUser.id} user={curUser}></UserForm>
           </div>
         </>
       )}

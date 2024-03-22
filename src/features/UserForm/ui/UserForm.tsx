@@ -1,17 +1,21 @@
 import { useAppDispatch } from "@/app/hooks"
-import { type SyntheticEvent } from "react"
+import { useState, type SyntheticEvent } from "react"
 import { setUsersData } from "@/widgets/MyDatabase/model/usersApiSlice"
-import type { UserFormProps } from "../model/types"
+import type { UserType } from "@/entities"
 import "./UsesrForm.scss"
 
+type UserFormProps = {
+  user: UserType
+}
+
 export const UserForm = (props: UserFormProps) => {
-  let inputsUserData = props.user
+  const [inputsUserData, setInputsUserData] = useState(props.user)
 
   const handleInput = (newVal: string, prop: string) => {
-    inputsUserData = {
+    setInputsUserData({
       ...inputsUserData,
       [prop]: newVal,
-    }
+    })
   }
 
   const dispatch = useAppDispatch()
@@ -19,13 +23,12 @@ export const UserForm = (props: UserFormProps) => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     dispatch(setUsersData(inputsUserData))
-    props.setCurUser(inputsUserData)
   }
 
   return (
     <div className="userForm">
       <div className="userForm__header">
-        <div className="userForm__title">{`${props.user.name} ${props.user.surname}`}</div>
+        <div className="userForm__title">{`${inputsUserData.name} ${inputsUserData.surname}`}</div>
       </div>
       <div className="userForm__info">
         <div className="userForm__photo">
@@ -36,17 +39,21 @@ export const UserForm = (props: UserFormProps) => {
         </div>
         <form className="userForm__data" onSubmit={handleSubmit}>
           <div className="userForm__dataTitles">
-            {Object.keys(props.user).map(prop => {
+            {Object.keys(inputsUserData).map(prop => {
               return <div key={prop}>{prop}</div>
             })}
           </div>
           <div className="userForm__dataContent">
-            <input key={`${props.user.id}id`} value={props.user.id} readOnly />
-            {Object.entries(props.user).map(([prop, value]) => {
+            <input
+              key={`${inputsUserData.id}id`}
+              value={inputsUserData.id}
+              readOnly
+            />
+            {Object.entries(inputsUserData).map(([prop, value]) => {
               if (prop === "id") return null
               return (
                 <input
-                  key={`${props.user.id}${prop}`}
+                  key={`${inputsUserData.id}${prop}`}
                   placeholder="Не указано"
                   defaultValue={value ?? ""}
                   onChange={event => {
