@@ -9,3 +9,5 @@ export const mockUsers: UserType[] = new Array(1000000)
     age: null,
     email: `email${index + 1}@email.com`,
   }))
+
+//не знаю, преобразовывают ли в Map большие данные с сервера

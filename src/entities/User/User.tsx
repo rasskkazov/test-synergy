@@ -1,6 +1,6 @@
 import type { UserType } from ".."
 import "./User.scss"
-export const User = ({ ...props }: UserType) => {
+export const User = (props: UserType) => {
   return (
     <div className="user">
       <img

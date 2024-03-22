@@ -1,4 +1,4 @@
-import { Database } from "./widgets/MyDatabase/ui/Database"
+import { Database } from "./widgets"
 import "./app/App.scss"
 const App = () => {
   return (

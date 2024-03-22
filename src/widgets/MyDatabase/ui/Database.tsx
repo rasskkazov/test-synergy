@@ -1,27 +1,35 @@
 import type { UserType } from "@/entities"
 import { UserForm, UsersList } from "@/features"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import "./Database.scss"
 import { useInitDatabase } from "../model/useInitDatabase"
+import { useAppSelector } from "@/app/hooks"
+import { selectUsers, selectUsersStatus } from "../model/usersApiSlice"
 
 export const Database = () => {
-  const [curUser, setCurUser] = useState({} as UserType)
+  useInitDatabase()
 
-  const users = useInitDatabase()
+  const [curUser, setCurUser] = useState({ id: 0 } as UserType)
+  const users = useAppSelector(selectUsers)
+  const status = useAppSelector(selectUsersStatus)
 
-  useEffect(() => {
-    if (!curUser?.id) setCurUser(users[0])
-  }, [curUser, users])
+  if (status === "fulfilled" && curUser.id === 0) setCurUser(users[0])
 
   return (
     <div className="database">
-      <div className="database__userList">
-        <UsersList {...{ setCurUser: setCurUser }}></UsersList>
-      </div>
-      <div className="database__userDisplay">
-        <UserForm {...curUser}></UserForm>
-      </div>
+      {status === "fulfilled" && (
+        <>
+          <div className="database__userList">
+            <UsersList {...{ setCurUser }}></UsersList>
+          </div>
+          <div className="database__userDisplay">
+            <UserForm {...{ user: curUser, setCurUser }}></UserForm>
+          </div>
+        </>
+      )}
+
+      {status !== "fulfilled" && <div>Загрузка...</div>}
     </div>
   )
 }

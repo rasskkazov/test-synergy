@@ -5,12 +5,12 @@ import { fetchUsers } from "../api/fetchUsers"
 
 export interface UsersSliceState {
   users: UserType[]
-  status: "idle" | "loading" | "failed"
+  status: "fulfilled" | "loading" | "failed"
 }
 
 const initialState: UsersSliceState = {
   users: [],
-  status: "idle",
+  status: "loading",
 }
 
 export const usersSlice = createAppSlice({
@@ -18,8 +18,6 @@ export const usersSlice = createAppSlice({
   initialState,
   reducers: create => ({
     setUsersData: create.reducer((state, action: PayloadAction<UserType>) => {
-      console.log("payload ", action.payload)
-
       state.users = state.users.map(user => {
         if (user.id === action.payload.id) {
           return { ...user, ...action.payload }
@@ -38,8 +36,8 @@ export const usersSlice = createAppSlice({
           state.status = "loading"
         },
         fulfilled: (state, action) => {
-          state.status = "idle"
           state.users = action.payload
+          state.status = "fulfilled"
         },
         rejected: state => {
           state.status = "failed"
